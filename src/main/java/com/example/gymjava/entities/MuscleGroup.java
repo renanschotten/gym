@@ -9,29 +9,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "tb_exercise")
-public class Exercise implements Serializable {
+@Table(name = "tb_muscle_group")
+public class MuscleGroup implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	@ManyToMany
-	@JoinTable(name = "tb_exercise_category", joinColumns = @JoinColumn(name = "exercise_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Set<MuscleGroup> muscleGroup = new HashSet<MuscleGroup>();
+	@JsonIgnore
+	@ManyToMany(mappedBy = "muscleGroup")
+	private Set<Exercise> exercises = new HashSet<Exercise>();
 
-	public Exercise() {
+	public MuscleGroup() {
 	}
 
-	public Exercise(Long id, String name) {
+	public MuscleGroup(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -53,8 +52,12 @@ public class Exercise implements Serializable {
 		this.name = name;
 	}
 
-	public Set<MuscleGroup> getMuscleGroup() {
-		return muscleGroup;
+	public Set<Exercise> getExercises() {
+		return exercises;
+	}
+
+	public void setExercises(Set<Exercise> exercises) {
+		this.exercises = exercises;
 	}
 
 	@Override
@@ -70,7 +73,7 @@ public class Exercise implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Exercise other = (Exercise) obj;
+		MuscleGroup other = (MuscleGroup) obj;
 		return Objects.equals(id, other.id);
 	}
 

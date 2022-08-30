@@ -10,28 +10,28 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.example.gymjava.entities.Exercise;
-import com.example.gymjava.repositories.ExerciseRepository;
+import com.example.gymjava.entities.MuscleGroup;
+import com.example.gymjava.repositories.MuscleGroupRepository;
 import com.example.gymjava.services.exception.DatabaseException;
 import com.example.gymjava.services.exception.ResourceNotFoundException;
 
 @Service
-public class ExerciseService {
+public class MuscleGroupService {
 
 	@Autowired
-	private ExerciseRepository repository;
+	private MuscleGroupRepository repository;
 
-	public List<Exercise> findAll() {
+	public List<MuscleGroup> findAll() {
 		return repository.findAll();
 	}
 
-	public Exercise findById(Long id) {
-		Optional<Exercise> exercise = repository.findById(id);
+	public MuscleGroup findById(Long id) {
+		Optional<MuscleGroup> exercise = repository.findById(id);
 		return exercise.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
-	public Exercise insert(Exercise exercise) {
-		return repository.save(exercise);
+	public MuscleGroup insert(MuscleGroup muscleGroup) {
+		return repository.save(muscleGroup);
 	}
 
 	public void deleteById(Long id) {
@@ -44,18 +44,17 @@ public class ExerciseService {
 		}
 	}
 
-	public Exercise update(Long id, Exercise exercise) {
+	public MuscleGroup update(Long id, MuscleGroup muscleGroup) {
 		try {
-			Exercise entity = repository.getReferenceById(id);
-			entity.setName(exercise.getName());
+			MuscleGroup entity = repository.getReferenceById(id);
+			entity.setName(muscleGroup.getName());
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id);
 		}
 	}
 
-	public List<Exercise> findByName(String name) {
+	public List<MuscleGroup> findByName(String name) {
 		return repository.findByNameIgnoreCase(name);
 	}
-
 }
